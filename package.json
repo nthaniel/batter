@@ -1,0 +1,22 @@
+{
+  "name": "batter",
+  "version": "1.0.0",
+  "description": "glitter",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swfree/batter.git"
+  },
+  "keywords": [
+    "glitter"
+  ],
+  "author": "nthaniel, swfree",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swfree/batter/issues"
+  },
+  "homepage": "https://github.com/swfree/batter#readme"
+}
