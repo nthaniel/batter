@@ -1,54 +1,55 @@
+
 function init() {
   var svg = d3.select("svg");
   g = svg.append("g");
 
-  var particles = generate();
+  var sim = d3.forceSimulation();
 
-  function glitter(data) {
+  function force(alpha) {
+    nodes = sim.nodes();
+    for (var i = 0, n = nodes.length, node, k = alpha * 0.1; i < n; ++i) {
+      node = nodes[i];
+      node.vx -= node.x * k;
+      node.vy -= node.y * k;
+    }
+  }
+
+  function update(data) {
     // DATA JOIN
     var particles = g.selectAll("circle")
-      .data(data);
+      .data(data, (d) => d);
 
-    // UPDATE
-    // particles.attr("class", "update");
+    // ADD FORCE
+    sim.force("attract", force())
+      .nodes(particles);
+
 
     // ENTER
     particles.enter().append("circle")
       .attr("class", "sparkle")
-      .attr("cx", function(d) { return 1000*d; })
-      .attr("cy", "100px")
+      .attr("cx", function(d) { return 500*d; })
+      .attr("cy", "-5px")
       .attr("r", "5px")
       .merge(particles)
-      .attr("cx", function(d) { return d; });
-
-    // ENTER + UPDATE
-
-    // EXIT
+      .transition()
+        .duration(5000)
+        .ease(d3.easeQuadIn)
+        .attr('cy', '505px')
+      .remove();
   }
 
-  function generate() {
-    return [ Math.random(), Math.random(), Math.random() ];
+  function genStartPoints(n = 5) {
+    return Array(n).fill(1).map(Math.random);
   }
 
-  glitter(particles);
-
-
+  // TODO
   // create user icon - cartoon magnet
+    // force should attract or repel particles
 
-  // somehow: dots attract towards user on condition(plugged in)
-
-  // add particles: fall continuously from top
   setInterval(function(){
-    console.log('intervaled')
-    glitter(generate());
-    // grab screen width
-    // pick a few random places on top of screen
-    // create sparkle dots
-    // fall at same speed
-  }, 1000)
+    update(genStartPoints(Math.ceil(Math.random() * 5) + 2));
+  }, 500)
 }
-
-
 
 
 navigator.getBattery().then(function(battery) {
@@ -59,7 +60,5 @@ navigator.getBattery().then(function(battery) {
   });
 
 });
-
-
 
 init();

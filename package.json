@@ -18,5 +18,7 @@
   "bugs": {
     "url": "https://github.com/swfree/batter/issues"
   },
-  "homepage": "https://github.com/swfree/batter#readme"
+  "homepage": "https://github.com/swfree/batter#readme",
+  "dependencies": {
+  }
 }
