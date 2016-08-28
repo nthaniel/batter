@@ -20,5 +20,6 @@
   },
   "homepage": "https://github.com/swfree/batter#readme",
   "dependencies": {
+    "d3": "^4.2.2"
   }
 }
