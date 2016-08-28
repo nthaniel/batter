@@ -4,8 +4,19 @@ function init() {
   var width = +svg.attr("width");
   var height = +svg.attr("height");
   var count = 0;
+  var generations = 0;
   var nodes = [];
-  var charging = false;
+  var charging;
+
+  navigator.getBattery().then(function(battery) {
+    console.log(battery);
+    charging = battery.charging;
+
+    battery.addEventListener('chargingchange', function(){
+      console.log("Battery charging? " + (battery.charging ? "Yes" : "No"));
+      charging = !charging;
+    });
+  });
 
   var simulation = d3.forceSimulation()
     // .force("charge", d3.forceManyBody().strength(() => 0.5))
@@ -26,7 +37,7 @@ function init() {
 
   function drawNodes(nodes) { 
     return svg.append("g")
-      .attr("class", "nodes")
+      .attr("class", "nodes" + generations)
       .selectAll("circle")
       .data(nodes)
       .enter().append("circle")
@@ -39,8 +50,8 @@ function init() {
 
   function ticked() {
     nodeElements
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+      .attr("cx", function(d) { return d ? d.x : 0; })
+      .attr("cy", function(d) { return d ? d.y : 0; });
   }
 
   setInterval(() => {
@@ -49,6 +60,8 @@ function init() {
     nodeElements = d3.selectAll("circle");
     nodes = nodes.concat(newNodes);
     simulation.nodes(nodes).on("tick", ticked);
+    svg.selectAll(`g[class=nodes${generations - 10000 / 500}]`).remove();
+    generations++;
   }, 500);
 }
 
